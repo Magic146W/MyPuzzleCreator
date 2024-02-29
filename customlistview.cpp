@@ -10,6 +10,7 @@
 
 
 /**
+ * @class CustomListView
  * @brief Subclass of QListView providing custom drag-and-drop functionality.
  */
 

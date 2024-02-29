@@ -1,6 +1,7 @@
 #include "itemhidenamedelegate.h"
 
 /**
+ * @class ItemHideNameDelegate
  * @brief The ItemHideNameDelegate class provides a delegate for hiding item names in views.
  *
  * This class extends QStyledItemDelegate to provide custom painting behavior for item names in views, allowing them to be hidden.

@@ -4,6 +4,7 @@
 #include <QListView>
 
 /**
+ * @class ImageHolderWidget
  * @brief The ImageHolderWidget class provides a widget for holding and handling drag-and-drop operations for images (puzzle shapes).
  *
  * This class allows users to drag and drop images onto the widget and handles the positioning of the dropped images.

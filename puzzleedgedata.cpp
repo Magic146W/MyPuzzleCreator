@@ -1,6 +1,7 @@
 #include "puzzleedgedata.h"
 
 /**
+ * @class PuzzleEdgeData
  * @brief The PuzzleEdgeData class manages puzzle edge data.
  *
  * This class is responsible for storing and retrieving puzzle edge information.

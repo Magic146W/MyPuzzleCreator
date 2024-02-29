@@ -4,6 +4,7 @@
 #include <QPainterPath>
 
 /**
+ * @class ImageDividerWithBezier
  * @brief The ImageDividerWithBezier class handles image division using bezier curves.
  *
  * This class provides functionality to divide an image using bezier curves.

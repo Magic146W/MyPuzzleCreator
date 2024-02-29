@@ -11,6 +11,7 @@
 #include <QMimeData>
 
 /**
+ * @class PlayPuzzlesShapes
  * @brief The PlayPuzzlesShapes class represents a dialog for managing puzzle shapes.
  *
  * This dialog allows users to manage puzzle shapes by dragging and dropping them.

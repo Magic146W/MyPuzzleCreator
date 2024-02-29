@@ -1,0 +1,27 @@
+var class_main_window =
+[
+    [ "adjustScrollBar", "class_main_window.html#a6c3afd84029ab865c16311a1240dc863", null ],
+    [ "copy", "class_main_window.html#acf6d6b4fec2a84de7ec6645260c061fa", null ],
+    [ "createActions", "class_main_window.html#a62cd8712fb41a754298f6f60eead2cb0", null ],
+    [ "createPuzzle", "class_main_window.html#a71d623677813ecf56f0a372d70ab563d", null ],
+    [ "loadFile", "class_main_window.html#a14d06817df4f97a753c296d2330fd895", null ],
+    [ "normalSize", "class_main_window.html#ae539edc061e530abc140bd22ad4efb0b", null ],
+    [ "open", "class_main_window.html#aa7473e4bbbcc281706ac2edef864fb45", null ],
+    [ "openHelpImage", "class_main_window.html#a65b4f5cb71c9d0f26b488eb3ff3f006f", null ],
+    [ "paste", "class_main_window.html#a191360e5ede86ddbba4b18e50bba9a56", null ],
+    [ "playPuzzle", "class_main_window.html#afb9ae8429b0d2844601471719ce7e738", null ],
+    [ "preparePuzzle", "class_main_window.html#afffb9487f9e8fad5c5614ce90bb8a2c9", null ],
+    [ "preparePuzzleSetUp", "class_main_window.html#aae6e3312978ca00262b6c3b743576ad6", null ],
+    [ "print", "class_main_window.html#a873aaee370c1456b99f1a2399ff13691", null ],
+    [ "receivePuzzlePreview", "class_main_window.html#a5fba0c49560be335d9633eaf45223560", null ],
+    [ "receivePuzzleShapes", "class_main_window.html#a8cb9a4af4e707c19cc3cd2bc980d9f6f", null ],
+    [ "resizeEvent", "class_main_window.html#aad75236c74a5c340c3e18749a9b5eb4f", null ],
+    [ "saveAs", "class_main_window.html#a7fbef0054cdec7bbbf3c06fb12af473c", null ],
+    [ "saveFile", "class_main_window.html#a59484fd90f3f3fcc339315637168ae06", null ],
+    [ "scaleImage", "class_main_window.html#a379f31e6fdfe5a23906066f0a44c88b0", null ],
+    [ "setImage", "class_main_window.html#ad1d392c319d9debb466d46d0764ff2d2", null ],
+    [ "updateActions", "class_main_window.html#aa2ffe303230bdcd17f4ddeafd222ccad", null ],
+    [ "updateListViewItems", "class_main_window.html#a83038f3df723fb505caa221897da4409", null ],
+    [ "zoomIn", "class_main_window.html#aa13e39ece777521d3f176155899309a6", null ],
+    [ "zoomOut", "class_main_window.html#a21d4700dd4bc51216443a4c788b85892", null ]
+];

@@ -11,6 +11,7 @@
 #include <QMimeData>
 
 /**
+ * @class PlayPuzzleGameDialog
  * @brief The PlayPuzzleGameDialog class represents a dialog for playing with the puzzle shapes.
  *
  * This dialog allows users to play puzzle games by dragging and dropping image pieces.

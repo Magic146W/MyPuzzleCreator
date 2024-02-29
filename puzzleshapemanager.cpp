@@ -2,6 +2,16 @@
 #include "puzzleshapemanager.h"
 #include "imagedividerwithbezier.h"
 
+/**
+ * @class PuzzleShapeManager
+ * @brief Manages the creation of shapes for puzzle.
+ *
+ * The PuzzleShapeManager class is responsible for managing the shapes of a puzzle.
+ * It handles the generation of puzzle shapes, cutting the puzzle image into individual
+ * shapes, and providing the necessary functionality to work with puzzle shapes.
+ */
+
+
 PuzzleShapeManager::PuzzleShapeManager(int rows, int columns, const QImage& image, QObject *parent)
     : myImage(image)
     , myImageCopy(image)
@@ -20,16 +30,33 @@ PuzzleShapeManager::~PuzzleShapeManager()
 
 }
 
+/**
+ * @brief Saves an edge along with its associated QPainterPath.
+ *
+ * @param edge The edge represented by a pair of QPoint.
+ * @param path The QPainterPath associated with the edge.
+ */
 void PuzzleShapeManager::saveEdge(const QPair<QPoint, QPoint>& edge, const QPainterPath& path)
 {
     puzzleEdgeData->addEdge(edge, path);
 }
 
+/**
+ * @brief Loads the QPainterPath associated with the given edge.
+ *
+ * @param edge The edge represented by a pair of QPoint.
+ * @return The QPainterPath associated with the edge.
+ */
 const QPainterPath PuzzleShapeManager::loadEdge(const QPair<QPoint, QPoint>& edge) const
 {
     return puzzleEdgeData->getEdgeByPoints(edge.first, edge.second);
 }
 
+/**
+ * @brief Generates the points for the puzzle grid.
+ *
+ * @return A QVector containing the generated points.
+ */
 QVector<QPoint> PuzzleShapeManager::generatePoints()
 {
     int imageWidth = myImage.width();
@@ -79,6 +106,11 @@ QVector<QPoint> PuzzleShapeManager::generatePoints()
     return points;
 }
 
+/**
+ * @brief Generates Bezier shapes for the puzzle edges.
+ *
+ * Uses the generated points to create Bezier shapes for the puzzle edges.
+ */
 void PuzzleShapeManager::bezierShapes()
 {
     ImageDividerWithBezier classicPuzzles(myImage, this);
@@ -102,6 +134,15 @@ void PuzzleShapeManager::bezierShapes()
     classicPuzzles.imageCopyPreview();
 }
 
+/**
+ * @brief Generates the Bezier flow points for an edge.
+ *
+ * Generates intermediate points for Bezier curves between two given points.
+ *
+ * @param p1 The start point.
+ * @param p7 The end point.
+ * @return A QVector containing the generated Bezier flow points.
+ */
 QVector<QPoint> PuzzleShapeManager::generateBezierFlowPoints(QPoint p1, QPoint p7)
 {
     QVector<QPoint> bezierPoints;
@@ -172,6 +213,12 @@ QVector<QPoint> PuzzleShapeManager::generateBezierFlowPoints(QPoint p1, QPoint p
     return bezierPoints;
 }
 
+
+/**
+ * @brief Receives the puzzle preview image and processes it.
+ *
+ * @param puzzlePreview The puzzle preview image.
+ */
 void PuzzleShapeManager::receivePreviewImage(const QImage puzzlePreview)
 {
     MainWindow *mainWindow = qobject_cast<MainWindow*>(parent);
@@ -190,6 +237,11 @@ void PuzzleShapeManager::receivePreviewImage(const QImage puzzlePreview)
     mainWindow->receivePuzzleShapes(finalShapes);
 }
 
+/**
+ * @brief Divides the puzzle into shapes based on its edges.
+ *
+ * @return A hash map containing the puzzle shapes.
+ */
 const QHash<int, QPainterPath> PuzzleShapeManager::dividePuzzleIntoShapes()
 {
     QHash<int, QPainterPath> puzzleShapes = *new QHash<int, QPainterPath>();
@@ -219,6 +271,12 @@ const QHash<int, QPainterPath> PuzzleShapeManager::dividePuzzleIntoShapes()
     return puzzleShapes;
 }
 
+/**
+ * @brief Calculates the cutting region for a puzzle shape.
+ *
+ * @param puzzleShape The QPainterPath representing the puzzle shape.
+ * @return The QRect representing the cutting region.
+ */
 QRect PuzzleShapeManager::calculateCuttingRegion(const QPainterPath& puzzleShape) const
 {
     QRect pathBounds = puzzleShape.boundingRect().toRect();
@@ -229,6 +287,12 @@ QRect PuzzleShapeManager::calculateCuttingRegion(const QPainterPath& puzzleShape
     return pathBounds.intersected(myImage.rect());
 }
 
+/**
+ * @brief Cuts the image based on the puzzle shape.
+ *
+ * @param puzzleShape The QPainterPath representing the puzzle shape.
+ * @return The QPixmap representing the cutout image.
+ */
 QPixmap PuzzleShapeManager::cutImage(const QPainterPath& puzzleShape)
 {
     myImageCopy = myImage;
@@ -239,6 +303,12 @@ QPixmap PuzzleShapeManager::cutImage(const QPainterPath& puzzleShape)
     return QPixmap::fromImage(cutoutImage);
 }
 
+/**
+ * @brief Draws the cutting shape on a transparent image.
+ *
+ * @param puzzleShape The QPainterPath representing the puzzle shape.
+ * @return The QImage containing the cutting shape.
+ */
 QImage PuzzleShapeManager::drawCuttingShape(const QPainterPath& puzzleShape)
 {
     QImage shape(myImage.size(), QImage::Format_ARGB32);

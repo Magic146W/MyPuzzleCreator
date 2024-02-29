@@ -5,6 +5,7 @@
 #include <QButtonGroup>
 
 /**
+ * @class PuzzleSetUpSettingsDialog
  * @brief The PuzzleSetUpSettingsDialog class provides a dialog for setting up puzzle shape division.
  *
  * This dialog allows users to customize the settings for the puzzle setup, including the number of rows and columns.
