@@ -32,7 +32,6 @@ private:
     QImage drawCuttingShape(const QPainterPath &shape);
     QPixmap cutImage(const QPainterPath &shape);
     QRect calculateCuttingRegion(const QPainterPath& puzzleShape) const;
-    QImage applyMask(const QImage& image, const QImage& mask);
     void bezierShapes();
 
     QVector<QPoint> points;

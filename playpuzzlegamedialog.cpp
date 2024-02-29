@@ -36,7 +36,7 @@ PlayPuzzleGameDialog::PlayPuzzleGameDialog(int rows, int columns, QImage& image,
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
     int desiredWidth = screenGeometry.width() * 1 / 2;
-    int desiredHeight = screenGeometry.height();
+    int desiredHeight = screenGeometry.height() * 0.9;
     resize(desiredWidth, desiredHeight);
     this->move(0,0);
 

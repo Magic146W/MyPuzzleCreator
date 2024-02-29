@@ -44,7 +44,7 @@ PlayPuzzlesShapes::PlayPuzzlesShapes(QStandardItemModel *model, const QSize &big
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
     int desiredWidth = screenGeometry.width() * 1 / 2;
-    int desiredHeight = screenGeometry.height();
+    int desiredHeight = screenGeometry.height() * 0.9;
     resize(desiredWidth, desiredHeight);
     this->move(screenGeometry.width() - this->width(), 0);
 

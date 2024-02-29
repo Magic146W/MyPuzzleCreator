@@ -41,9 +41,9 @@ void ImageDividerWithBezier::prepareToCutImage()
     emit saveEdge(edge, bezierPath);
 
     QPen blackPen(Qt::black);
-    blackPen.setWidth(4);
+    blackPen.setWidth(3);
     QPen whitePen(Qt::white);
-    whitePen.setWidth(2);
+    whitePen.setWidth(1);
 
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(blackPen);

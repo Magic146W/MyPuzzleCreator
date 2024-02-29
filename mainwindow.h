@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QListView>
+#include <QPrinter>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -69,7 +70,7 @@ private:
     int rows;
     int columns;
 
-#if defined(QT_PRINTSUPPORT_LIB) && QT_CONFIG(printer)
+#if defined(QT_PRINTSUPPORT_LIB)
     QPrinter printer;
 #endif
 

@@ -22,6 +22,8 @@
 #include <QStringListModel>
 #include <QStandardItemModel>
 #include <QListWidgetItem>
+#include <QPrintDialog>
+#include <QPainter>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -44,7 +46,6 @@ MainWindow::MainWindow(QWidget *parent)
     listView = new QListView;
     listView->setModel(new QStringListModel);
     listView->setDragEnabled(false);
-    listView->setEnabled(false);
 
     splitter->addWidget(scrollArea);
     splitter->addWidget(listView);
@@ -174,9 +175,10 @@ void MainWindow::saveAs()
 void MainWindow::print()
 {
     Q_ASSERT(!imageLabel->pixmap(Qt::ReturnByValue).isNull());
+
 #if defined(QT_PRINTSUPPORT_LIB) && QT_CONFIG(printdialog)
     if (imageLabel->pixmap(Qt::ReturnByValue).isNull())
-        qFatal("ASSERT: "imageLabel->pixmap(Qt::ReturnByValue).isNull()" in file ...");
+        qFatal("ASSERT: imageLabel->pixmap(Qt::ReturnByValue).isNull() in file ...");
     QPrintDialog dialog(&printer, this);
     if (dialog.exec()) {
         QPainter painter(&printer);
@@ -322,10 +324,7 @@ void MainWindow::createPuzzle()
 
     listView->setModel(model);
     playAction->setEnabled(true);
-
-
-
-    playPuzzle();
+    createAction->setEnabled(false);
 }
 
 void MainWindow::playPuzzle()
@@ -395,7 +394,7 @@ void MainWindow::createActions()
     createAction->setEnabled(false);
 
     playAction = puzzleMenu->addAction(tr("&Play"), this, &MainWindow::playPuzzle);
-    playAction->setShortcut(tr("Ctrl+J"));
+    playAction->setShortcut(tr("Ctrl+M"));
     playAction->setEnabled(false);
 }
 

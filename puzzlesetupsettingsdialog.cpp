@@ -11,7 +11,7 @@ PuzzleSetUpSettingsDialog::PuzzleSetUpSettingsDialog(const QVector<int> &imageSi
 {
     ui->setupUi(this);
 
-    maxRows = imageSize[0] / 57;
+    maxRows = imageSize[0] / 57; // approximate pixels for 1.5cm
     ui->label_rows->setText(ui->label_rows->text() + QString::number(maxRows));
     maxColumns = imageSize[1] / 57;
     ui->label_columns->setText(ui->label_columns->text() + QString::number(maxColumns));
@@ -52,7 +52,7 @@ QSize PuzzleSetUpSettingsDialog::calculateShapeSize() const
     int imageWidth = imageSize[1];
 
     int shapeWidth = imageWidth / columnCount;
-    int shapeHeight = imageHeight / rowCount;     
+    int shapeHeight = imageHeight / rowCount;
 
     double cmPerPixel = 0.0264583333; // 1 pixel in cm
     double shapeWidthCm = shapeWidth * cmPerPixel;
@@ -88,65 +88,43 @@ void PuzzleSetUpSettingsDialog::on_pushButton_Accept_clicked()
     int shapeNumberRow = ui->comboBox_row->currentText().toInt();
     int shapeNumberColumn = ui->comboBox_column->currentText().toInt();
 
-        emit acceptPuzzleDimensions(shapeNumberRow, shapeNumberColumn);
+    emit acceptPuzzleDimensions(shapeNumberRow, shapeNumberColumn);
 
     close();
 }
 
 void PuzzleSetUpSettingsDialog::on_pushButton_columnMatch_clicked()
 {
-    qreal difference = 999;
-    for (int i = 0; i < maxRows; ++i)
+    int row = maxRows*ui->comboBox_column->currentText().toInt()/maxColumns; // get rows equivalent based on percentage calculations
+    if(row>maxRows)
     {
-        ui->comboBox_row->setCurrentIndex(i);
-        calculateShapeSize();
-
-        qreal columnValue = ui->label_ShapeSize_Columns->text().toFloat();
-        qreal rowValue = ui->label_ShapeSize_Rows->text().toFloat();
-
-        if(difference < qAbs(columnValue - rowValue))
-        {
-            if(i != 0)
-            {
-                ui->comboBox_row->setCurrentIndex(i-1);
-                return;
-            } else
-            {
-                ui->comboBox_row->setCurrentIndex(0);
-            }
-        } else
-        {
-            difference = qAbs(columnValue - rowValue);
-        }
+        row = maxRows;
     }
+
+    row -= 2; //get index
+    if(row < 0)
+    {
+        row = 0;
+    }
+
+    ui->comboBox_row->setCurrentIndex(row);
 }
 
 
 void PuzzleSetUpSettingsDialog::on_pushButton_row_clicked()
 {
-    qreal difference = 999;
-    for (int i = 0; i < maxColumns; ++i)
+    int column = maxColumns*ui->comboBox_row->currentText().toInt()/maxRows;
+    if(column>maxColumns)
     {
-        ui->comboBox_column->setCurrentIndex(i);
-        calculateShapeSize();
-
-        qreal columnValue = ui->label_ShapeSize_Columns->text().toFloat();
-        qreal rowValue = ui->label_ShapeSize_Rows->text().toFloat();
-
-        if(difference < qAbs(columnValue - rowValue))
-        {
-            if(i != 0)
-            {
-                ui->comboBox_column->setCurrentIndex(i-1);
-                return;
-            } else
-            {
-                ui->comboBox_column->setCurrentIndex(0);
-            }
-        } else
-        {
-            difference = qAbs(columnValue - rowValue);
-        }
+        column = maxColumns;
     }
+
+    column -= 2;
+    if(column < 0)
+    {
+        column = 0;
+    }
+
+    ui->comboBox_column->setCurrentIndex(column);
 }
 
