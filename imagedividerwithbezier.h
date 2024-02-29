@@ -12,8 +12,7 @@ class ImageDividerWithBezier : public QObject
     Q_OBJECT
 
 public:
-    explicit ImageDividerWithBezier(QObject *parent = nullptr);
-    ImageDividerWithBezier(const QImage& image);
+    explicit ImageDividerWithBezier(const QImage& image, QObject *parent = nullptr);
     ~ImageDividerWithBezier();
 
     void setBezierPoints(const QPoint &p1, const QVector<QPoint>& bezierPoints, const QPoint &p7);

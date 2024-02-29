@@ -4,6 +4,13 @@
 #include <QVector>
 #include <QButtonGroup>
 
+/**
+ * @brief The PuzzleSetUpSettingsDialog class provides a dialog for setting up puzzle shape division.
+ *
+ * This dialog allows users to customize the settings for the puzzle setup, including the number of rows and columns.
+ */
+
+
 PuzzleSetUpSettingsDialog::PuzzleSetUpSettingsDialog(const QVector<int> &imageSize, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PuzzleSetUpSettingsDialog)
@@ -31,18 +38,33 @@ PuzzleSetUpSettingsDialog::~PuzzleSetUpSettingsDialog()
     delete ui;
 }
 
+/**
+     * @brief Checks when data from row comboBox was changed.
+     *
+     * @param index The index of selected row.
+     */
 void PuzzleSetUpSettingsDialog::onShapeNumberRowChanged(int index)
 {
     Q_UNUSED(index);
     calculateShapeSize();
 }
 
+/**
+     * @brief Checks when data from column comboBox was changed.
+     *
+     * @param index The index of selected row.
+     */
 void PuzzleSetUpSettingsDialog::onShapeNumberColumnChanged(int index)
 {
     Q_UNUSED(index);
     calculateShapeSize();
 }
 
+/**
+     * @brief Calculates the size of each shape in the puzzle.
+     *
+     * @return The size of each shape.
+     */
 QSize PuzzleSetUpSettingsDialog::calculateShapeSize() const
 {
     int rowCount = ui->comboBox_row->currentText().toInt();
@@ -65,6 +87,12 @@ QSize PuzzleSetUpSettingsDialog::calculateShapeSize() const
     return QSize(shapeWidth, shapeHeight);
 }
 
+/**
+     * @brief Sets up the combo boxes for selecting the number of rows and columns.
+     *
+     * @param maxRows The maximum number of rows.
+     * @param maxColumns The maximum number of columns.
+     */
 void PuzzleSetUpSettingsDialog::setUpComboBoxes(int maxRows, int maxColumns)
 {
     for (int i = 2; i <= maxRows; ++i)
@@ -109,7 +137,6 @@ void PuzzleSetUpSettingsDialog::on_pushButton_columnMatch_clicked()
 
     ui->comboBox_row->setCurrentIndex(row);
 }
-
 
 void PuzzleSetUpSettingsDialog::on_pushButton_row_clicked()
 {

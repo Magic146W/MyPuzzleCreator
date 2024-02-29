@@ -3,6 +3,13 @@
 #include <QStandardItem>
 #include <QListView>
 
+/**
+ * @brief The ImageHolderWidget class provides a widget for holding and handling drag-and-drop operations for images (puzzle shapes).
+ *
+ * This class allows users to drag and drop images onto the widget and handles the positioning of the dropped images.
+ */
+
+
 ImageHolderWidget::ImageHolderWidget(QSize& biggestShape, QWidget *parent) : QWidget(parent)
 {
     setAcceptDrops(true);
@@ -76,7 +83,6 @@ void ImageHolderWidget::dropEvent(QDropEvent *event)
 
             emit handleDropEvent(label, labelName, dropPos-offset);
         }
-
     }else if(event->mimeData()->hasFormat("application/x-custom-item-data"))
     {
         QByteArray itemData = event->mimeData()->data("application/x-custom-item-data");

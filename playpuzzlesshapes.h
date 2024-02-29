@@ -37,7 +37,6 @@ private:
     QStandardItemModel* prepareItemsForView(QStandardItemModel *model);
 
 private slots:
-    void handleItemDragEntered(QDragEnterEvent *event);
     void handleItemDropped(QDropEvent *event);
 
 signals:

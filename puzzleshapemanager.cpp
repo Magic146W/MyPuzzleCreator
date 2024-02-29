@@ -81,7 +81,7 @@ QVector<QPoint> PuzzleShapeManager::generatePoints()
 
 void PuzzleShapeManager::bezierShapes()
 {
-    ImageDividerWithBezier classicPuzzles(myImage);
+    ImageDividerWithBezier classicPuzzles(myImage, this);
     connect(&classicPuzzles, &ImageDividerWithBezier::saveEdge,this, &PuzzleShapeManager::saveEdge);
     connect(&classicPuzzles, &ImageDividerWithBezier::loadPreviewImage, this, &PuzzleShapeManager::receivePreviewImage);
 

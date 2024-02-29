@@ -10,6 +10,13 @@
 #include <QDrag>
 #include <QMimeData>
 
+/**
+ * @brief The PlayPuzzleGameDialog class represents a dialog for playing with the puzzle shapes.
+ *
+ * This dialog allows users to play puzzle games by dragging and dropping image pieces.
+ */
+
+
 PlayPuzzleGameDialog::PlayPuzzleGameDialog(int rows, int columns, QImage& image, QSize &biggestShape, QWidget *parent) :
     QDialog(parent)
     , ui(new Ui::PlayPuzzleGameDialog)
@@ -48,11 +55,21 @@ PlayPuzzleGameDialog::~PlayPuzzleGameDialog()
     delete ui;
 }
 
+/**
+ * @brief Resizes the dialog.
+ */
 void PlayPuzzleGameDialog::resizeDialog()
 {
-
+    //planned function
 }
 
+/**
+ * @brief Handles the drop event by adding a new image label to the image holder widget.
+ *
+ * @param newImage The new image label.
+ * @param fileName The name of the file associated with the image.
+ * @param dropPos The position where the image is dropped.
+ */
 void PlayPuzzleGameDialog::handleDropEvent(QLabel *newImage, QString fileName, QPoint dropPos)
 {
     newImage->setParent(imageHolderWidget);
@@ -63,6 +80,11 @@ void PlayPuzzleGameDialog::handleDropEvent(QLabel *newImage, QString fileName, Q
     emit deleteShapeFromPool(fileName);
 }
 
+/**
+ * @brief Deletes the label with the specified name from the image holder widget.
+ *
+ * @param name The name of the label to delete.
+ */
 void PlayPuzzleGameDialog::deleteLabelWithName(QString name)
 {
     foreach (QObject *child, imageHolderWidget->children())

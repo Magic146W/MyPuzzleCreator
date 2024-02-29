@@ -1,14 +1,16 @@
 #include "imagedividerwithbezier.h"
-
 #include <QPoint>
 #include <QPainter>
 #include <QPainterPath>
 
-ImageDividerWithBezier::ImageDividerWithBezier(QObject *parent)
-    : QObject{parent}
-{}
+/**
+ * @brief The ImageDividerWithBezier class handles image division using bezier curves.
+ *
+ * This class provides functionality to divide an image using bezier curves.
+ */
 
-ImageDividerWithBezier::ImageDividerWithBezier(const QImage &image)
+
+ImageDividerWithBezier::ImageDividerWithBezier(const QImage &image, QObject *parent)
     : originalImage(image)
 {
     imageCopy = originalImage;
@@ -19,6 +21,12 @@ ImageDividerWithBezier::~ImageDividerWithBezier()
 
 }
 
+/**
+ * @brief Sets the bezier control points for the image division.
+ * @param p1 Edge beggining control point.
+ * @param bezierPoints The intermediate points creating lines for bezier modifications.
+ * @param p7 Edge ending control point.
+ */
 void ImageDividerWithBezier::setBezierPoints(const QPoint &p1, const QVector<QPoint>& bezierPoints, const QPoint &p7)
 {
     controlPoint1 = p1;
@@ -31,6 +39,9 @@ void ImageDividerWithBezier::setBezierPoints(const QPoint &p1, const QVector<QPo
     controlPoint6 = bezierPoints[4];
 }
 
+/**
+ * @brief Prepares the image for cutting based on the bezier control points.
+ */
 void ImageDividerWithBezier::prepareToCutImage()
 {
     QPainter painter(&imageCopy);
@@ -54,6 +65,9 @@ void ImageDividerWithBezier::prepareToCutImage()
     painter.end();
 }
 
+/**
+ * @brief Saves a preview of the image copy.
+ */
 void ImageDividerWithBezier::imageCopyPreview()
 {
     QString filePath = "C:/Users/macwe/Pictures/puzzlePreview.jpg";
@@ -61,6 +75,10 @@ void ImageDividerWithBezier::imageCopyPreview()
     emit loadPreviewImage(imageCopy);
 }
 
+/**
+ * @brief Creates the bezier path based on the control points.
+ * @return The bezier path.
+ */
 QPainterPath ImageDividerWithBezier::createBezierPath() const
 {
     QPainterPath bezierPath;
@@ -94,6 +112,13 @@ QPainterPath ImageDividerWithBezier::createBezierPath() const
     return bezierPath;
 }
 
+/**
+ * @brief Calculates the location of a bezier control points for lines outside puzzle "tab"/"notch".
+ * @param point1 The starting point of the baseline.
+ * @param point2 The ending point of the baseline.
+ * @param distancePoint The distance point from the baseline.
+ * @return The calculated point for bezier line creation.
+ */
 QPoint ImageDividerWithBezier::calculateBezierPointLocationForBaseLine(const QPoint &point1, const QPoint &point2, const QPoint &distancePoint) const
 {
     QPoint bezierPoint;
@@ -117,6 +142,13 @@ QPoint ImageDividerWithBezier::calculateBezierPointLocationForBaseLine(const QPo
     return bezierPoint;
 }
 
+/**
+ * @brief Calculates the location of a bezier control points for lines perpendicular to base lines.
+ * @param point1 The starting point of the line.
+ * @param point2 The ending point of the line.
+ * @param distancePoint The distance point from the line.
+ * @return The calculated point for bezier line creation.
+ */
 QPoint ImageDividerWithBezier::calculateBezierPointLocationForPerpendicularLines(const QPoint &point1, const QPoint &point2, const QPoint &distancePoint) const
 {
     QPoint bezierPoint;
@@ -139,6 +171,13 @@ QPoint ImageDividerWithBezier::calculateBezierPointLocationForPerpendicularLines
     return bezierPoint;
 }
 
+/**
+ * @brief Calculates the location of a bezier control point for lines making top part of the "tab"/"notch".
+ * @param point1 The starting point of the line.
+ * @param point2 The ending point of the line.
+ * @param distancePoint The distance point from the line.
+ * @return The calculated point for bezier line creation.
+ */
 QPoint ImageDividerWithBezier::calculateBezierPointLocationForLinesBetweenPerpendicularLines(const QPoint &point1, const QPoint &point2, const QPoint &distancePoint) const
 {
     QPoint bezierPoint;

@@ -25,6 +25,12 @@
 #include <QPrintDialog>
 #include <QPainter>
 
+/**
+ * @class MainWindow
+ * @brief Represents the main window of the application.
+ */
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -70,12 +76,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/**
+ * @brief Handles resizing events for the main window.
+ *
+ * @param event The resize event.
+ */
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
     updateListViewItems();
 }
 
+/**
+ * @brief Updates the items in the list view.
+ */
 void MainWindow::updateListViewItems()
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel*>(listView->model());
@@ -86,6 +100,12 @@ void MainWindow::updateListViewItems()
     }
 }
 
+/**
+ * @brief Initializes the image file dialog.
+ *
+ * @param dialog The file dialog to initialize.
+ * @param acceptMode The accept mode of the file dialog (AcceptOpen or AcceptSave).
+ */
 static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMode acceptMode)
 {
     static bool firstDialog = true;
@@ -109,6 +129,9 @@ static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMo
         dialog.setDefaultSuffix("jpg");
 }
 
+/**
+ * @brief Opens a file dialog to select an image file.
+ */
 void MainWindow::open()
 {
     QFileDialog dialog(this, tr("Open File"));
@@ -117,6 +140,12 @@ void MainWindow::open()
     while (dialog.exec() == QDialog::Accepted && !loadFile(dialog.selectedFiles().constFirst())) {}
 }
 
+/**
+ * @brief Loads an image file.
+ *
+ * @param fileName The name of the image file to load.
+ * @return True if the file is successfully loaded; otherwise, false.
+ */
 bool MainWindow::loadFile(const QString &fileName)
 {
     QImageReader reader(fileName);
@@ -133,6 +162,11 @@ bool MainWindow::loadFile(const QString &fileName)
     return true;
 }
 
+/**
+ * @brief Sets the main image.
+ *
+ * @param newImage The new image to set.
+ */
 void MainWindow::setImage(const QImage &newImage)
 {
     image = newImage;
@@ -149,6 +183,12 @@ void MainWindow::setImage(const QImage &newImage)
     updateActions();
 }
 
+/**
+ * @brief Saves the current image to a file with the given file name.
+ *
+ * @param fileName The file name to save the image to.
+ * @return True if the image was successfully saved, false otherwise.
+ */
 bool MainWindow::saveFile(const QString &fileName)
 {
     QImageWriter writer(fileName);
@@ -164,6 +204,9 @@ bool MainWindow::saveFile(const QString &fileName)
     return true;
 }
 
+/**
+ * @brief Opens a dialog to save the current image as a file.
+ */
 void MainWindow::saveAs()
 {
     QFileDialog dialog(this, tr("Save File As"));
@@ -172,6 +215,9 @@ void MainWindow::saveAs()
     while (dialog.exec() == QDialog::Accepted && !saveFile(dialog.selectedFiles().constFirst())) {}
 }
 
+/**
+ * @brief Prints the current image.
+ */
 void MainWindow::print()
 {
     Q_ASSERT(!imageLabel->pixmap(Qt::ReturnByValue).isNull());
@@ -193,6 +239,9 @@ void MainWindow::print()
 #endif
 }
 
+/**
+ * @brief Copies the current image to the clipboard.
+ */
 void MainWindow::copy()
 {
 #ifndef QT_NO_CLIPBOARD
@@ -201,6 +250,11 @@ void MainWindow::copy()
 }
 
 #ifndef QT_NO_CLIPBOARD
+/**
+ * @brief Retrieves an image from the clipboard if available.
+ *
+ * @return The image retrieved from the clipboard.
+ */
 static QImage clipboardImage()
 {
     if (const QMimeData *mimeData = QGuiApplication::clipboard()->mimeData()) {
@@ -214,6 +268,9 @@ static QImage clipboardImage()
 }
 #endif
 
+/**
+ * @brief Pastes the image from the clipboard into the application.
+ */
 void MainWindow::paste()
 {
 #ifndef QT_NO_CLIPBOARD
@@ -230,23 +287,34 @@ void MainWindow::paste()
 #endif // !QT_NO_CLIPBOARD
 }
 
-
+/**
+ * @brief Zooms in on the current image.
+ */
 void MainWindow::zoomIn()
 {
     scaleImage(1.25);
 }
 
+/**
+ * @brief Zooms out on the current image.
+ */
 void MainWindow::zoomOut()
 {
     scaleImage(0.8);
 }
 
+/**
+ * @brief Resets the image display to its normal size.
+ */
 void MainWindow::normalSize()
 {
     scaleFactor = 1.0;
     imageLabel->adjustSize();
 }
 
+/**
+ * @brief Opens a dialog to prepare the puzzle setup.
+ */
 void MainWindow::preparePuzzleSetUp()
 {
     qreal dpiXMultiplier = image.dotsPerMeterX() * 0.0254 / 100; //image size with inches divided with standard dpi size
@@ -258,19 +326,36 @@ void MainWindow::preparePuzzleSetUp()
     dialog->open();
 }
 
+/**
+ * @brief Prepares the puzzle with the given rows and columns.
+ *
+ * @param rows Number of rows in the puzzle.
+ * @param columns Number of columns in the puzzle.
+ */
 void MainWindow::preparePuzzle(int rows, int columns)
 {
     this->rows = rows;
     this->columns = columns;
     QSharedPointer<PuzzleShapeManager> puzzleShapes(new PuzzleShapeManager(rows, columns, image, this));
     createAction->setEnabled(true);
+    playAction->setEnabled(false);
 }
 
+/**
+ * @brief Receives the preview image of the puzzle shapes.
+ *
+ * @param imagePreview The preview image of puzzle shapes.
+ */
 void MainWindow::receivePuzzlePreview(const QImage imagePreview)
 {
     setImage(imagePreview);
 }
 
+/**
+ * @brief Receives the puzzle shapes from the puzzle setup dialog.
+ *
+ * @param shapes Hash map of puzzle shapes.
+ */
 void MainWindow::receivePuzzleShapes(const QHash<int, QPixmap> shapes)
 {
     int index = 0;
@@ -300,6 +385,9 @@ void MainWindow::receivePuzzleShapes(const QHash<int, QPixmap> shapes)
     }
 }
 
+/**
+ * @brief Creates the puzzle by populating the list view with puzzle shapes.
+ */
 void MainWindow::createPuzzle()
 {
     listView->setViewMode(QListView::IconMode);
@@ -327,6 +415,9 @@ void MainWindow::createPuzzle()
     createAction->setEnabled(false);
 }
 
+/**
+ * @brief Plays the puzzle game by opening the puzzle game dialog.
+ */
 void MainWindow::playPuzzle()
 {
     PlayPuzzleGameDialog *playPuzzle = new PlayPuzzleGameDialog(rows, columns, image,biggestShape, this);
@@ -341,6 +432,9 @@ void MainWindow::playPuzzle()
     playPuzzle->show();
 }
 
+/**
+ * @brief Creates the main window actions for file, edit, view, and puzzle operations.
+ */
 void MainWindow::createActions()
 {
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
@@ -398,6 +492,9 @@ void MainWindow::createActions()
     playAction->setEnabled(false);
 }
 
+/**
+ * @brief Updates the availability of actions based on the presence of an image.
+ */
 void MainWindow::updateActions()
 {
     saveAsAction->setEnabled(!image.isNull());
@@ -405,6 +502,11 @@ void MainWindow::updateActions()
     normalSizeAction->setEnabled(!image.isNull());
 }
 
+/**
+ * @brief Scales the image according to the provided factor.
+ *
+ * @param factor The scaling factor to apply to the image.
+ */
 void MainWindow::scaleImage(double factor)
 {
     scaleFactor *= factor;
@@ -417,11 +519,20 @@ void MainWindow::scaleImage(double factor)
     zoomOutAction->setEnabled(scaleFactor > 0.333);
 }
 
+/**
+ * @brief Adjusts the scroll bar value based on the scaling factor.
+ *
+ * @param scrollBar The scroll bar to adjust.
+ * @param factor The scaling factor.
+ */
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
     scrollBar->setValue(int(factor * scrollBar->value() + ((factor - 1) * scrollBar->pageStep()/2)));
 }
 
+/**
+ * @brief Opens a help image stored in the resources.
+ */
 void MainWindow::openHelpImage()
 {
     QImage introImage(":/help/exampleFile.jpg");

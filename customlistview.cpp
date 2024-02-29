@@ -8,6 +8,16 @@
 #include <QMimeData>
 #include <QDebug>
 
+
+/**
+ * @brief Subclass of QListView providing custom drag-and-drop functionality.
+ */
+
+/**
+     * @brief Event handler for drag enter events.
+     *
+     * @param event The drag enter event.
+     */
 void CustomListView::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("application/x-custom-item-data") || event->mimeData()->hasFormat("application/x-custom-listView-data"))
@@ -22,6 +32,11 @@ void CustomListView::dragEnterEvent(QDragEnterEvent *event)
     event->acceptProposedAction();
 }
 
+/**
+     * @brief Event handler for drag move events.
+     *
+     * @param event The drag move event.
+     */
 void CustomListView::dragMoveEvent(QDragMoveEvent *event)
 {
     event->setAccepted(true);
@@ -30,6 +45,11 @@ void CustomListView::dragMoveEvent(QDragMoveEvent *event)
     emit itemDragMoved(event);
 }
 
+/**
+     * @brief Event handler for drop events.
+     *
+     * @param event The drop event.
+     */
 void CustomListView::dropEvent(QDropEvent *event)
 {
     event->setAccepted(true);
@@ -38,6 +58,13 @@ void CustomListView::dropEvent(QDropEvent *event)
     emit itemDropped(event);
 }
 
+/**
+ * @brief Event handler for mouse press events.
+ *
+ * Creates a drag object with custom mime data
+ *
+ * @param event The mouse press event.
+ */
 void CustomListView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {

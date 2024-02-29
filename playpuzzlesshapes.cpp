@@ -10,6 +10,13 @@
 #include <QRandomGenerator>
 #include <QMimeData>
 
+/**
+ * @brief The PlayPuzzlesShapes class represents a dialog for managing puzzle shapes.
+ *
+ * This dialog allows users to manage puzzle shapes by dragging and dropping them.
+ */
+
+
 PlayPuzzlesShapes::PlayPuzzlesShapes(QStandardItemModel *model, const QSize &biggestShape, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PlayPuzzlesShapes)
@@ -48,7 +55,6 @@ PlayPuzzlesShapes::PlayPuzzlesShapes(QStandardItemModel *model, const QSize &big
     resize(desiredWidth, desiredHeight);
     this->move(screenGeometry.width() - this->width(), 0);
 
-    connect(listView, &CustomListView::itemDragEntered, this, &PlayPuzzlesShapes::handleItemDragEntered);
     connect(listView, &CustomListView::itemDropped, this, &PlayPuzzlesShapes::handleItemDropped);
 }
 
@@ -57,6 +63,11 @@ PlayPuzzlesShapes::~PlayPuzzlesShapes()
     delete ui;
 }
 
+/**
+     * @brief Deletes the item with the specified name from the list view.
+     *
+     * @param name The name of the item to delete.
+     */
 void PlayPuzzlesShapes::deleteItemWithName(QString name)
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel*>(listView->model());
@@ -86,12 +97,20 @@ void PlayPuzzlesShapes::deleteItemWithName(QString name)
     }
 }
 
+/**
+     * @brief Handles resize events for the dialog.
+     *
+     * @param event The resize event.
+     */
 void PlayPuzzlesShapes::resizeEvent(QResizeEvent *event)
 {
     QDialog::resizeEvent(event);
     updateListViewItems();
 }
 
+/**
+     * @brief Updates the items in the list view.
+     */
 void PlayPuzzlesShapes::updateListViewItems()
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel*>(listView->model());
@@ -102,6 +121,12 @@ void PlayPuzzlesShapes::updateListViewItems()
     }
 }
 
+/**
+     * @brief Prepares the items for display in the list view.
+     *
+     * @param model The model containing the puzzle shapes.
+     * @return A model containing the prepared items.
+     */
 QStandardItemModel *PlayPuzzlesShapes::prepareItemsForView(QStandardItemModel *model)
 {
     if (!model)
@@ -141,80 +166,85 @@ QStandardItemModel *PlayPuzzlesShapes::prepareItemsForView(QStandardItemModel *m
     return unsortedModel;
 }
 
-void PlayPuzzlesShapes::handleItemDragEntered(QDragEnterEvent *event)
-{}
-
+/**
+     * @brief Handles the item dropped event for the list view. Does it based on type of mime data format.
+     *
+     * @param event The drop event.
+     */
 void PlayPuzzlesShapes::handleItemDropped(QDropEvent *event)
 {
-    QPoint dropPos = event->position().toPoint();
-    QModelIndex dropIndex = listView->indexAt(dropPos);
-
-    QStandardItem* item = nullptr;
-    if(event->mimeData()->hasFormat("application/x-custom-listView-data"))
+    if(event)
     {
-        QByteArray itemData = event->mimeData()->data("application/x-custom-listView-data");
-        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-        QPixmap pixmap;
-        QString labelName;
-        QPoint offset;
-        dataStream >> pixmap >> labelName >> offset;
-        item = new QStandardItem(QIcon(pixmap), labelName);
-    }else if(event->mimeData()->hasFormat("application/x-custom-item-data"))
-    {
-        QByteArray itemData = event->mimeData()->data("application/x-custom-item-data");
-        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-        QPixmap pixmap;
-        QString labelName;
-        dataStream >> pixmap >> labelName;
-        item = new QStandardItem(QIcon(pixmap), labelName);
+        QPoint dropPos = event->position().toPoint();
+        QModelIndex dropIndex = listView->indexAt(dropPos);
 
-        emit dropEventReceived(labelName);
-    } else
-    {
-        return;
-    }
-
-
-    if (item)
-    {
-        QStandardItemModel *targetModel = qobject_cast<QStandardItemModel*>(listView->model());
-        if (targetModel)
+        QStandardItem* item = nullptr;
+        if(event->mimeData()->hasFormat("application/x-custom-listView-data"))
         {
-            QString droppedItemText = item->text();
+            QByteArray itemData = event->mimeData()->data("application/x-custom-listView-data");
+            QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+            QPixmap pixmap;
+            QString labelName;
+            QPoint offset;
+            dataStream >> pixmap >> labelName >> offset;
+            item = new QStandardItem(QIcon(pixmap), labelName);
+        }else if(event->mimeData()->hasFormat("application/x-custom-item-data"))
+        {
+            QByteArray itemData = event->mimeData()->data("application/x-custom-item-data");
+            QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+            QPixmap pixmap;
+            QString labelName;
+            dataStream >> pixmap >> labelName;
+            item = new QStandardItem(QIcon(pixmap), labelName);
 
-            for (int row = 0; row < targetModel->rowCount(); ++row)
+            emit dropEventReceived(labelName);
+        } else
+        {
+            return;
+        }
+
+
+        if (item)
+        {
+            QStandardItemModel *targetModel = qobject_cast<QStandardItemModel*>(listView->model());
+            if (targetModel)
             {
-                for (int column = 0; column < targetModel->columnCount(); ++column)
+                QString droppedItemText = item->text();
+
+                for (int row = 0; row < targetModel->rowCount(); ++row)
                 {
-                    QModelIndex index = targetModel->index(row, column);
-                    if (index.isValid())
+                    for (int column = 0; column < targetModel->columnCount(); ++column)
                     {
-                        QStandardItem* existingItem = targetModel->itemFromIndex(index);
-                        if (existingItem && existingItem->text() == droppedItemText)
+                        QModelIndex index = targetModel->index(row, column);
+                        if (index.isValid())
                         {
-                            if (!dropIndex.isValid())
+                            QStandardItem* existingItem = targetModel->itemFromIndex(index);
+                            if (existingItem && existingItem->text() == droppedItemText)
                             {
-                                targetModel->removeRow(index.row(), index.parent());
-                                targetModel->appendRow(item);
-                            }else
-                            {
-                                targetModel->removeRow(index.row(), index.parent());
-                                targetModel->insertRow(dropIndex.row(), item);
+                                if (!dropIndex.isValid())
+                                {
+                                    targetModel->removeRow(index.row(), index.parent());
+                                    targetModel->appendRow(item);
+                                }else
+                                {
+                                    targetModel->removeRow(index.row(), index.parent());
+                                    targetModel->insertRow(dropIndex.row(), item);
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
                 }
-            }
 
-            if(targetModel->rowCount()<maxShapeNumber)
-            {
-                if (!dropIndex.isValid())
+                if(targetModel->rowCount()<maxShapeNumber)
                 {
-                    targetModel->appendRow(item);
-                }else
-                {
-                    targetModel->insertRow(dropIndex.row(), item);
+                    if (!dropIndex.isValid())
+                    {
+                        targetModel->appendRow(item);
+                    }else
+                    {
+                        targetModel->insertRow(dropIndex.row(), item);
+                    }
                 }
             }
         }
