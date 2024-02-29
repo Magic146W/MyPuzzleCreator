@@ -241,33 +241,13 @@ QPixmap PuzzleShapeManager::cutImage(const QPainterPath& puzzleShape)
 
 QImage PuzzleShapeManager::drawCuttingShape(const QPainterPath& puzzleShape)
 {
-    QImage mask(myImage.size(), QImage::Format_ARGB32);
-    mask.fill(Qt::transparent);
+    QImage shape(myImage.size(), QImage::Format_ARGB32);
+    shape.fill(Qt::transparent);
 
-    QPainter maskPainter(&mask);
-    maskPainter.setRenderHint(QPainter::Antialiasing);
-    maskPainter.fillPath(puzzleShape, Qt::black);
-    maskPainter.end();
+    QPainter painter(&shape);
+    painter.setClipPath(puzzleShape);
+    painter.drawImage(QPoint(), myImage);
+    painter.end();
 
-    return applyMask(myImage, mask);
-}
-
-QImage PuzzleShapeManager::applyMask(const QImage& image, const QImage& mask)
-{
-    QImage result(image.size(), QImage::Format_ARGB32);
-    result.fill(Qt::transparent);
-
-    for (int y = 0; y < image.height(); ++y) {
-        for (int x = 0; x < image.width(); ++x) {
-            QRgb imagePixel = image.pixel(x, y);
-            QRgb maskPixel = mask.pixel(x, y);
-
-            if(qAlpha(maskPixel) != 0)
-            {
-                result.setPixel(x, y, imagePixel);
-            }
-        }
-    }
-
-    return result;
+    return shape;
 }
