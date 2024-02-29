@@ -8,7 +8,7 @@
 Welcome to My Puzzle Creator, a puzzle creation software developed using Qt 6.6.1 and C++, and built with CMake. This tool was created as a learning project, aimed at broadening my knowledge of the QWidget, QPainter, QPainterPath classes, as well as drag-and-drop events.<br>
 
   <p align="center">
-    This README provides an initial overview of the puzzle creation software. More comprehensive and detailed information can be found in the documentation. Link to YouTube presentation in top left corner.
+    This README provides an initial overview of the puzzle creation software. More comprehensive and detailed information can be found in the documentation created by doxygen (accessed by index.html in html folder). Link to YouTube presentation in top left corner.
     <br />
   </p>
 </div>
